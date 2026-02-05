@@ -1,3 +1,7 @@
+> [!CAUTION]
+> This is the original `README.md`, not updated yet.
+
+
 # @slidev/theme-apple-basic
 
 [![NPM version](https://img.shields.io/npm/v/@slidev/theme-apple-basic?color=3AB9D4&label=)](https://www.npmjs.com/package/@slidev/theme-apple-basic)
