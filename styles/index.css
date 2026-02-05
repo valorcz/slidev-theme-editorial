@@ -1,0 +1,285 @@
+/* theme/styles/index.css */
+
+/* Import standard modern fonts */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,700;9..40,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+/*  --slidev-theme-primary: #EB5E28; /* Default Parametric Accent */
+  --slidev-theme-primary: #FFA500;
+  
+  /* Fonts */
+  --slidev-theme-font-header: 'DM Sans', sans-serif;
+  --slidev-theme-font-body: 'Inter', sans-serif;
+  --slidev-theme-font-mono: 'JetBrains Mono', monospace;
+  
+  /* UI Elements */
+  --slidev-code-radius: 8px;
+  --slidev-code-font-size: 0.9em;
+}
+
+/* -------------------------------------------
+   LIGHT THEME (Clean, airy, "SaaS" look)
+   ------------------------------------------- */
+html:not(.dark) {
+  --slidev-theme-bg: #FFFFFF;
+  --slidev-theme-color: #111827; /* Gray-900 (Softer than black) */
+  /* --slidev-theme-dim: #6B7280;   /* Gray-500 */
+  --slidev-theme-dim: color-mix(in srgb, var(--slidev-theme-primary), white 50%);
+  --slidev-theme-border: #E5E7EB;
+  --slidev-theme-surface: #F9FAFB; /* Slightly off-white surface */
+}
+
+/* -------------------------------------------
+   DARK THEME (Deep, "Cyber" look)
+   ------------------------------------------- */
+html.dark {
+  --slidev-theme-bg: #0F1115;    /* Deep Blue-Black */
+  --slidev-theme-color: #F3F4F6; /* Gray-100 */
+  /* --slidev-theme-dim: #9CA3AF;   /* Gray-400 */
+  --slidev-theme-dim: color-mix(in srgb, var(--slidev-theme-primary), #888888 70%);
+  --slidev-theme-border: #374151;
+  --slidev-theme-surface: #1F2937;
+}
+
+/* -------------------------------------------
+   TYPOGRAPHY HIERARCHY
+   ------------------------------------------- */
+
+/* Global Reset & Layout Container */
+.slidev-layout {
+  font-family: var(--slidev-theme-font-body);
+  letter-spacing: -0.01em;
+  background-color: var(--slidev-theme-bg);
+  color: var(--slidev-theme-color);
+  font-weight: 400;
+  
+  /* FIX: Increased padding from default to give it "breathing room" */
+  padding-left: 4.5rem !important;  /* Was likely 2rem default */
+  padding-right: 4.5rem !important;
+
+/* Enforce consistent tighter vertical spacing for ALL slides */
+  padding-top: 1.5rem !important;  /* pt-6 equivalent */
+  padding-bottom: 2rem !important; /* Enough space for the tiny footer */
+}
+
+/* Ensure paragraph lines don't stretch indefinitely on wide screens */
+.slidev-layout p, 
+.slidev-layout li {
+  max-width: 75ch; /* ~75 characters is optimal reading width */
+}
+
+/* Headlines: Geometric, Bold, Tight */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--slidev-theme-font-header);
+  line-height: 1.1;
+  margin: 0;
+  color: var(--slidev-theme-color);
+}
+
+h1 {
+  font-size: 3.5rem !important;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem !important;
+}
+
+h2 {
+  font-size: 2.5rem !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem !important;
+}
+
+h3 {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  margin-bottom: 0.75rem !important;
+  color: var(--slidev-theme-primary); /* Accent color for H3 */
+}
+
+h4 {
+  font-family: var(--slidev-theme-font-mono) !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--slidev-theme-dim);
+  margin-bottom: 1rem !important;
+}
+
+/* Body Text */
+p {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+  max-width: 65ch; /* Optimal reading width */
+}
+
+/* Lists */
+ul, ol {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 0; /* Reset padding for custom bullets */
+}
+
+li {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+  list-style: none;
+}
+
+/* Modern Bullet Point */
+li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--slidev-theme-primary);
+  opacity: 0.8;
+}
+
+/* -------------------------------------------
+   UTILITY & BLOCKS
+   ------------------------------------------- */
+
+/* Code Blocks: Mac-style window */
+.slidev-code {
+  border: 1px solid var(--slidev-theme-border) !important;
+  background-color: var(--slidev-theme-surface) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-top: 1.5rem !important;
+}
+
+/* Blockquotes: Clean vertical line */
+blockquote {
+  border-left: 4px solid var(--slidev-theme-primary);
+  padding-left: 1.5rem;
+  margin-left: 0;
+  font-style: italic;
+  font-family: var(--slidev-theme-font-body); /* Kept consistent */
+  font-size: 1.25rem;
+  color: var(--slidev-theme-dim);
+}
+
+/* Strong Text */
+strong, b {
+  font-weight: 600;
+  color: var(--slidev-theme-primary); /* Highlight keywords in color */
+}
+
+/* FIX: Flexible Card Component */
+.card-box {
+  background-color: var(--slidev-theme-surface);
+  border: 1px solid var(--slidev-theme-border);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  height: 100%; /* Fill available height in grid */
+  min-height: 0; /* Allow flex shrinking */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent spillover */
+}
+
+/* Ensure text inside doesn't force width issues */
+.card-box p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--slidev-theme-dim);
+  overflow-wrap: break-word;
+}
+
+.card-box h3 {
+  font-size: 1.1rem !important;
+  font-weight: 700;
+  margin-bottom: 0.75rem !important;
+  color: var(--slidev-theme-color);
+}
+
+/* Mermaid Diagram Fixes */
+.mermaid {
+  background: transparent !important;
+  display: flex;
+  justify-content: center;
+}
+
+/* FIX 1: H3 Spacing
+   If an H3 follows another element (is not first), push it down.
+*/
+h3:not(:first-child) {
+  margin-top: 2rem !important; /* Generous breathing room */
+}
+
+/* FIX 2: "Dense Mode" for overflowing slides 
+   Use class: "dense" in the slide frontmatter to trigger this.
+*/
+.slidev-layout.dense {
+  /* 1. Shrink the body text (p, li, code, etc.) */
+  font-size: 0.9rem !important; 
+}
+
+.slidev-layout.dense h1 {
+  /* 2. REMOVED font-size override. Headers now stay huge. */
+  margin-bottom: 0.5rem !important; /* Keep margins tight for space */
+}
+
+.slidev-layout.dense h3 {
+  /* 3. REMOVED font-size override. Sub-headers stay normal size. */
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.2rem !important;
+}
+
+/* Ensure lines inside paragraphs are tight to save vertical space */
+.slidev-layout.dense p, 
+.slidev-layout.dense li {
+  line-height: 1.4 !important; 
+  margin-bottom: 0.5rem !important;
+}
+
+/* Scale down Mermaid/Diagrams slightly to fit the dense layout */
+.slidev-layout.dense .mermaid {
+  transform: scale(0.9);
+  transform-origin: top left;
+  margin-top: 1rem;
+}
+
+/* Ensure the Watermark stays in the background */
+.slidev-layout h1 {
+  position: relative;
+  z-index: 10; /* Main titles stay on top */
+}
+
+.slidev-layout h1 {
+  margin-top: 0 !important;
+  line-height: 1.1 !important;
+}
+
+/* FIX: Typographic Unit (H1 + H3)
+   If an H3 immediately follows an H1, treat them as a single unit.
+   1. Cancel the bottom margin of the H1
+   2. Cancel the top margin of the H3
+   3. Force them closer
+*/
+.slidev-layout h1 + h3 {
+  margin-top: -0.5rem !important; /* Pull H3 up */
+  margin-bottom: 2.5rem !important; /* Push subsequent content down */
+  opacity: 0.8; /* Make the H3 slightly softer than the main title */
+  font-weight: 500 !important; /* Slightly lighter weight for contrast */
+/*  color: var(--slidev-theme-dim) !important; */
+}
+
+/* Optional: Ensure the H1 above doesn't push too hard */
+.slidev-layout h1:has(+ h3) {
+  margin-bottom: 0 !important;
+}
+
+.slidev-layout.dense h1 + h3 {
+  margin-top: -0.8rem !important; /* Slightly less negative pull since fonts are smaller */
+  margin-bottom: 1.5rem !important;
+}
+

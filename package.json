@@ -1,0 +1,44 @@
+{
+  "name": "slidev-theme-editorial",
+  "version": "0.0.9",
+  "description": "A dark, editorial style theme for Slidev",
+  "author": "Vašek Lorenc <vaclav.lorenc@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://sli.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/themes"
+  },
+  "bugs": "https://github.com/slidevjs/themes/issues",
+  "keywords": [
+    "slidev-theme",
+    "slidev"
+  ],
+  "engines": {
+    "node": ">=14.0.0",
+    "slidev": ">=v0.47.0"
+  },
+  "slidev": {
+    "defaults": {
+      "fonts": {
+        "sans": "Inter",
+        "mono": "Fira Code",
+        "header": "Inter"
+      },
+    "style": "./styles/index.css"
+    }
+  },
+  "dependencies": {
+    "@slidev/types": "^0.47.0",
+    "@tresjs/core": "^5.3.3",
+    "codemirror-theme-vars": "^0.1.2",
+    "prism-theme-vars": "^0.2.4",
+    "three": "^0.182.0"
+  },
+  "scripts": {
+    "dev": "slidev example.md --open",
+    "build": "slidev build example.md",
+    "export": "slidev export example.md",
+    "screenshot": "slidev export example.md --format png"
+  }
+}
