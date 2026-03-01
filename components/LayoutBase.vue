@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useNav } from '@slidev/client'
+import { useSlideContext } from '@slidev/client'
 import LayoutFooter from './LayoutFooter.vue'
 
 const props = defineProps<{
-  class?: string // Allow passing extra classes for specific layouts
+  class?: string 
 }>()
 
-const { slides, currentPage } = useNav()
+// 1. Swap useNav for useSlideContext to get the localized $page
+const { $slidev, $page } = useSlideContext()
 
 // CENTRALIZED LOGIC: Find the section title
 const currentSectionTitle = computed(() => {
-  const idx = currentPage.value - 1
-  const allSlides = slides.value
+  // 2. Use $page.value (this specific slide's index) instead of the global currentPage
+  const idx = $page.value - 1
+  const allSlides = $slidev.nav.slides
   
   if (!allSlides || idx < 0) return null
 
+  // 3. Look backwards from THIS slide's index to find the nearest section
   for (let i = idx; i >= 0; i--) {
     const slide = allSlides[i]
     
