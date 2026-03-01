@@ -4,23 +4,22 @@ import { useSlideContext } from '@slidev/client'
 import LayoutBase from '../components/LayoutBase.vue'
 import SinusWaves from '../components/SinusWaves.vue'
 
-// USE SLIDECONTEXT AS REQUESTED
-const { $slidev } = useSlideContext()
+// 1. Destructure $page alongside $slidev
+const { $slidev, $page } = useSlideContext()
 
 const sectionNumber = computed(() => {
-  // 1. Get the raw array of slide metadata
   const slides = $slidev.nav.slides
-  // 2. Get current 1-based index
-  const currentIndex = $slidev.nav.currentPage - 1
+  
+  // 2. Use $page.value instead of the global navigation state
+  // $page is 1-indexed, so we subtract 1 to get the array index
+  const myIndex = $page.value - 1
   
   let count = 0
 
-  // 3. Loop purely by index (Safe & Robust)
-  // We only check slides UP TO the current one.
-  for (let i = 0; i <= currentIndex; i++) {
+  // 3. Loop purely up to THIS slide's index
+  for (let i = 0; i <= myIndex; i++) {
     const slide = slides[i]
     
-    // 4. Drill down to find the layout
     const meta = slide.meta || {}
     const frontmatter = meta.frontmatter || (slide as any).frontmatter || {}
     
@@ -34,7 +33,6 @@ const sectionNumber = computed(() => {
     }
   }
   
-  // Pad with leading zero (01, 02, etc.)
   return count.toString().padStart(2, '0')
 })
 </script>
