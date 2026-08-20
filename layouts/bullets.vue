@@ -1,7 +1,11 @@
+<script setup lang="ts">
+import LayoutBase from '../components/LayoutBase.vue'
+</script>
+
 <template>
-  <div class="slidev-layout h-full grid bullets">
-    <div class="pt-18">
+  <LayoutBase class="bullets">
+    <div class="my-auto flex flex-col justify-center">
       <slot />
     </div>
-  </div>
+  </LayoutBase>
 </template>

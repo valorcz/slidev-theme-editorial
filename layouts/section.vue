@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useSlideContext } from '@slidev/client'
-import LayoutBase from '../components/LayoutBase.vue'
+import LayoutFooter from '../components/LayoutFooter.vue'
 import SinusWaves from '../components/SinusWaves.vue'
 
 // 1. Destructure $page alongside $slidev
@@ -11,7 +11,6 @@ const sectionNumber = computed(() => {
   const slides = $slidev.nav.slides
   
   // 2. Use $page.value instead of the global navigation state
-  // $page is 1-indexed, so we subtract 1 to get the array index
   const myIndex = $page.value - 1
   
   let count = 0
@@ -38,22 +37,26 @@ const sectionNumber = computed(() => {
 </script>
 
 <template>
-  <LayoutBase class="section relative overflow-hidden">
+  <div class="slidev-layout section h-full w-full relative flex flex-col justify-center px-16 overflow-hidden bg-[var(--slidev-theme-bg)]">
     
+    <!-- Full-bleed background waves -->
     <SinusWaves />
 
-    <div class="absolute top-0 right-0 p-12 select-none pointer-events-none z-10">
-      <span class="text-[10rem] font-black leading-none text-[var(--slidev-theme-primary)] opacity-10 font-mono tracking-tighter">
+    <!-- Big Section Number -->
+    <div class="absolute top-6 right-8 select-none pointer-events-none z-10">
+      <span class="text-[9rem] font-black leading-none text-[var(--slidev-theme-primary)] opacity-10 font-mono tracking-tighter">
         {{ sectionNumber }}
       </span>
     </div>
 
-    <div class="h-full w-full flex flex-col justify-center items-start text-left relative z-10 pr-24">
-      <div class="w-20 h-2 bg-[var(--slidev-theme-primary)] mb-8 rounded-full"></div>
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-4xl">
+      <div class="w-16 h-1.5 bg-[var(--slidev-theme-primary)] mb-6 rounded-full"></div>
       <slot />
     </div>
 
-  </LayoutBase>
+    <LayoutFooter :showTitle="true" :showPage="true" />
+  </div>
 </template>
 
 <style scoped>

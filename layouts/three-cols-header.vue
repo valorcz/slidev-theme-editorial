@@ -5,14 +5,14 @@ import LayoutBase from '../components/LayoutBase.vue'
 <template>
   <LayoutBase class="three-cols-header">
     
-    <div class="mb-8">
+    <div class="mb-2">
       <slot />
     </div>
 
-    <div class="grid grid-cols-3 gap-6 h-full items-start">
-      <div class="h-full"><slot name="left" /></div>
-      <div class="h-full"><slot name="center" /></div>
-      <div class="h-full"><slot name="right" /></div>
+    <div class="grid grid-cols-3 gap-5 flex-1 min-h-0 items-start">
+      <div class="h-full min-h-0"><slot name="left" /></div>
+      <div class="h-full min-h-0"><slot name="center" /></div>
+      <div class="h-full min-h-0"><slot name="right" /></div>
     </div>
 
   </LayoutBase>

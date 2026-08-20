@@ -22,18 +22,14 @@
 		"defaults": {
 			"fonts": {
 				"sans": "Inter",
-				"mono": "Fira Code",
-				"header": "Inter"
+				"mono": "JetBrains Mono",
+				"header": "DM Sans"
 			},
 			"style": "./styles/index.css"
 		}
 	},
 	"dependencies": {
-		"@slidev/types": "^0.47.0",
-		"@tresjs/core": "^5.3.3",
-		"codemirror-theme-vars": "^0.1.2",
-		"prism-theme-vars": "^0.2.4",
-		"three": "^0.182.0"
+		"@slidev/types": "^0.47.5"
 	},
 	"scripts": {
 		"dev": "slidev example.md --open",

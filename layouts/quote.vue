@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useNav } from '@slidev/client'
+import { useSlideContext } from '@slidev/client'
 import LayoutFooter from '../components/LayoutFooter.vue'
 
-const { slides, currentPage } = useNav()
+const { $slidev, $page } = useSlideContext()
 
 const currentSectionTitle = computed(() => {
-  const idx = currentPage.value - 1
-  const allSlides = slides.value
+  const idx = $page.value - 1
+  const allSlides = $slidev.nav.slides
   
   if (!allSlides || idx < 0) return null
 

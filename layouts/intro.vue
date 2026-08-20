@@ -1,7 +1,11 @@
+<script setup lang="ts">
+import LayoutBase from '../components/LayoutBase.vue'
+</script>
+
 <template>
-  <div class="slidev-layout intro">
-    <div class="my-auto">
+  <LayoutBase class="intro">
+    <div class="my-auto flex flex-col justify-center max-w-3xl">
       <slot />
     </div>
-  </div>
+  </LayoutBase>
 </template>
