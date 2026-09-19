@@ -2,50 +2,95 @@
 import { computed } from 'vue'
 import { useSlideContext } from '@slidev/client'
 import LayoutFooter from '../components/LayoutFooter.vue'
-import SinusWaves from '../components/SinusWaves.vue'
+import SectionRail from '../components/SectionRail.vue'
+import SectionEffect from '../components/SectionEffect.vue'
 
-// 1. Destructure $page alongside $slidev
-const { $slidev, $page } = useSlideContext()
+const { $slidev, $page, $frontmatter: fm } = useSlideContext()
 
-const sectionNumber = computed(() => {
+const sectionIndexNumber = computed(() => {
   const slides = $slidev.nav.slides
-  
-  // 2. Use $page.value instead of the global navigation state
   const myIndex = $page.value - 1
-  
   let count = 0
-
-  // 3. Loop purely up to THIS slide's index
   for (let i = 0; i <= myIndex; i++) {
     const slide = slides[i]
-    
     const meta = slide.meta || {}
     const frontmatter = meta.frontmatter || (slide as any).frontmatter || {}
-    
-    const layout = 
-      frontmatter.layout || 
-      meta.layout || 
-      (slide as any).layout
-
+    const layout = frontmatter.layout || meta.layout || (slide as any).layout
     if (layout === 'section') {
       count++
     }
   }
-  
-  return count.toString().padStart(2, '0')
+  return count
+})
+
+const sectionNumberFormatted = computed(() => {
+  return sectionIndexNumber.value.toString().padStart(2, '0')
+})
+
+// Watermark controls: can be disabled via watermark: false or number: false
+const showWatermark = computed(() => {
+  return fm.watermark !== false && fm.number !== false && fm.index !== false
+})
+
+const watermarkContent = computed(() => {
+  if (typeof fm.watermark === 'string') return fm.watermark
+  if (typeof fm.number === 'string' || typeof fm.number === 'number') return String(fm.number)
+  return sectionNumberFormatted.value
+})
+
+// Full-screen background image & translucency controls
+const bgImage = computed(() => fm.image || fm.background || fm.bgImage)
+const bgOpacity = computed(() => {
+  if (typeof fm.imageOpacity === 'number') return fm.imageOpacity
+  if (typeof fm.opacity === 'number') return fm.opacity
+  return 0.18 // subtle editorial default
+})
+const bgBlur = computed(() => {
+  if (fm.blur === true) return 'blur(8px)'
+  if (typeof fm.blur === 'number') return `blur(${fm.blur}px)`
+  return 'none'
+})
+
+// Selectable animation effects: 'waves' | 'particles' | 'grid' | 'glow' | 'cube' | 'none' | 'random'
+const activeEffect = computed(() => {
+  if (fm.effect !== undefined) return fm.effect
+  const globalEffect = ($slidev.configs?.themeConfig as any)?.sectionEffect || ($slidev.configs as any)?.sectionEffect
+  if (globalEffect) return globalEffect
+  if (bgImage.value) return 'none'
+  return 'waves'
 })
 </script>
 
 <template>
   <div class="slidev-layout section h-full w-full relative flex flex-col justify-center px-16 overflow-hidden bg-[var(--slidev-theme-bg)]">
     
-    <!-- Full-bleed background waves -->
-    <SinusWaves />
+    <!-- Top Progress Rail -->
+    <SectionRail />
 
-    <!-- Big Section Number -->
-    <div class="absolute top-6 right-8 select-none pointer-events-none z-10">
+    <!-- Optional Full-screen Background Image with Adjustable Translucency -->
+    <div 
+      v-if="bgImage"
+      class="absolute inset-0 z-0 pointer-events-none bg-cover bg-center transition-opacity duration-300"
+      :style="{
+        backgroundImage: `url(${bgImage})`,
+        opacity: bgOpacity,
+        filter: bgBlur,
+      }"
+    />
+
+    <!-- Subtle gradient scrim for readability when background image is present -->
+    <div 
+      v-if="bgImage && fm.scrim !== false"
+      class="absolute inset-0 z-0 pointer-events-none bg-gradient-to-r from-[var(--slidev-theme-bg)] via-[color-mix(in_srgb,var(--slidev-theme-bg)_85%,transparent)] to-transparent"
+    />
+
+    <!-- Selectable Background Animation Effect (waves, grid, glow, cube, none, random) -->
+    <SectionEffect :effect="activeEffect" :seed="sectionIndexNumber" />
+
+    <!-- Big Section Number Watermark (can be disabled via watermark: false or number: false) -->
+    <div v-if="showWatermark" class="absolute top-6 right-8 select-none pointer-events-none z-10">
       <span class="text-[9rem] font-black leading-none text-[var(--slidev-theme-primary)] opacity-10 font-mono tracking-tighter">
-        {{ sectionNumber }}
+        {{ watermarkContent }}
       </span>
     </div>
 
@@ -58,6 +103,7 @@ const sectionNumber = computed(() => {
     <LayoutFooter :showTitle="true" :showPage="true" />
   </div>
 </template>
+
 
 <style scoped>
 .slidev-layout.section :deep(h1) {

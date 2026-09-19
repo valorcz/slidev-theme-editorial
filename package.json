@@ -28,8 +28,12 @@
 			"style": "./styles/index.css"
 		}
 	},
+	"type": "module",
 	"dependencies": {
-		"@slidev/types": "^0.47.5"
+		"@slidev/types": "catalog:"
+	},
+	"devDependencies": {
+		"@slidev/cli": "catalog:"
 	},
 	"scripts": {
 		"dev": "slidev example.md --open",
