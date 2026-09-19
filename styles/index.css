@@ -1,49 +1,84 @@
 /* theme/styles/index.css */
-
-/* Import standard modern fonts */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,700;9..40,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-/*  --slidev-theme-primary: #EB5E28; /* Default Parametric Accent */
+  /* Primary Brand Accent (Default: Editorial Amber-Orange) */
   --slidev-theme-primary: #FFA500;
-  
-  /* Fonts */
+
+  /* Automatic Perceptual Derivation via OKLCH Relative Colors */
+  --slidev-theme-secondary: var(
+    --slidev-secondary-override,
+    oklch(from var(--slidev-theme-primary) calc(l + 0.02) calc(c * 0.95) calc(h + 145))
+  );
+  --slidev-theme-tertiary: var(
+    --slidev-tertiary-override,
+    oklch(from var(--slidev-theme-primary) calc(l - 0.02) calc(c * 0.90) calc(h + 240))
+  );
+
+  /* Categorical Ramp for charts, multi-column cards, and palettes */
+  --cat-1: var(--slidev-theme-primary);
+  --cat-2: var(--slidev-theme-secondary);
+  --cat-3: var(--slidev-theme-tertiary);
+  --cat-4: oklch(from var(--slidev-theme-primary) calc(l + 0.04) calc(c * 0.9) calc(h + 65));
+  --cat-5: oklch(from var(--slidev-theme-primary) calc(l - 0.04) calc(c * 0.9) calc(h - 45));
+
   --slidev-theme-font-header: 'DM Sans', sans-serif;
   --slidev-theme-font-body: 'Inter', sans-serif;
   --slidev-theme-font-mono: 'JetBrains Mono', monospace;
-  
-  /* UI Elements */
   --slidev-code-radius: 8px;
   --slidev-code-font-size: 0.9em;
 }
 
-/* -------------------------------------------
-   LIGHT THEME (Clean, airy, "SaaS" look)
-   ------------------------------------------- */
+/* Light & Dark Modes: Calibrated for WCAG Contrast & Vibrancy */
 html:not(.dark) {
   --slidev-theme-bg: #FFFFFF;
-  --slidev-theme-color: #111827; /* Gray-900 (Softer than black) */
-  /* --slidev-theme-dim: #6B7280;   /* Gray-500 */
-  --slidev-theme-dim: color-mix(in srgb, var(--slidev-theme-primary), white 50%);
-  --slidev-theme-border: #E5E7EB;
-  --slidev-theme-surface: #F9FAFB; /* Slightly off-white surface */
+  --slidev-theme-color: #111827;
+  --slidev-theme-dim: #64748B;
+  --slidev-theme-border: #E2E8F0;
+  --slidev-theme-surface: #F8FAFC;
+
+  /* Light-mode contrast clamping */
+  --slidev-theme-secondary: var(
+    --slidev-secondary-override,
+    oklch(from var(--slidev-theme-primary) clamp(0.38, l, 0.48) calc(c * 0.95) calc(h + 145))
+  );
+  --slidev-theme-tertiary: var(
+    --slidev-tertiary-override,
+    oklch(from var(--slidev-theme-primary) clamp(0.38, l, 0.48) calc(c * 0.90) calc(h + 240))
+  );
 }
 
-/* -------------------------------------------
-   DARK THEME (Deep, "Cyber" look)
-   ------------------------------------------- */
 html.dark {
-  --slidev-theme-bg: #0F1115;    /* Deep Blue-Black */
-  --slidev-theme-color: #F3F4F6; /* Gray-100 */
-  /* --slidev-theme-dim: #9CA3AF;   /* Gray-400 */
-  --slidev-theme-dim: color-mix(in srgb, var(--slidev-theme-primary), #888888 70%);
-  --slidev-theme-border: #374151;
-  --slidev-theme-surface: #1F2937;
+  --slidev-theme-bg: #0F1115;
+  --slidev-theme-color: #F3F4F6;
+  --slidev-theme-dim: #94A3B8;
+  --slidev-theme-border: #334155;
+  --slidev-theme-surface: #1E293B;
+
+  /* Dark-mode luminosity tuning */
+  --slidev-theme-secondary: var(
+    --slidev-secondary-override,
+    oklch(from var(--slidev-theme-primary) clamp(0.68, l + 0.06, 0.78) calc(c * 0.95) calc(h + 145))
+  );
+  --slidev-theme-tertiary: var(
+    --slidev-tertiary-override,
+    oklch(from var(--slidev-theme-primary) clamp(0.65, l + 0.04, 0.76) calc(c * 0.90) calc(h + 240))
+  );
 }
 
-/* -------------------------------------------
-   TYPOGRAPHY HIERARCHY
-   ------------------------------------------- */
+/* Accent Switch Scopes */
+.accent-primary   { --slidev-theme-primary: var(--cat-1); }
+.accent-secondary { --slidev-theme-primary: var(--slidev-theme-secondary); }
+.accent-tertiary  { --slidev-theme-primary: var(--slidev-theme-tertiary); }
+
+/* Utility Classes */
+.text-secondary   { color: var(--slidev-theme-secondary) !important; }
+.text-tertiary    { color: var(--slidev-theme-tertiary) !important; }
+.bg-secondary     { background-color: var(--slidev-theme-secondary) !important; }
+.bg-tertiary      { background-color: var(--slidev-theme-tertiary) !important; }
+.border-secondary { border-color: var(--slidev-theme-secondary) !important; }
+.border-tertiary  { border-color: var(--slidev-theme-tertiary) !important; }
+
 
 /* Global Reset & Layout Container */
 .slidev-layout {
@@ -52,234 +87,439 @@ html.dark {
   background-color: var(--slidev-theme-bg);
   color: var(--slidev-theme-color);
   font-weight: 400;
-  
-  /* FIX: Increased padding from default to give it "breathing room" */
-  padding-left: 4.5rem !important;  /* Was likely 2rem default */
-  padding-right: 4.5rem !important;
-
-/* Enforce consistent tighter vertical spacing for ALL slides */
-  padding-top: 1.5rem !important;  /* pt-6 equivalent */
-  padding-bottom: 2rem !important; /* Enough space for the tiny footer */
+  padding: 2rem 3.5rem 2.25rem;
+  box-sizing: border-box;
 }
 
-/* Ensure paragraph lines don't stretch indefinitely on wide screens */
 .slidev-layout p, 
 .slidev-layout li {
-  max-width: 75ch; /* ~75 characters is optimal reading width */
+  max-width: 75ch;
 }
 
-/* Headlines: Geometric, Bold, Tight */
+/* Typography Hierarchy */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--slidev-theme-font-header);
-  line-height: 1.1;
+  line-height: 1.12;
   margin: 0;
   color: var(--slidev-theme-color);
 }
 
 h1 {
-  font-size: 3.5rem !important;
+  font-size: 2.75rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  margin-bottom: 1.5rem !important;
+  margin-bottom: 0.75rem;
+  position: relative;
+  z-index: 10;
 }
 
 h2 {
-  font-size: 2.5rem !important;
+  font-size: 2rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin-bottom: 1rem !important;
+  margin-bottom: 0.6rem;
 }
 
 h3 {
-  font-size: 1.5rem !important;
-  font-weight: 700;
-  margin-bottom: 0.75rem !important;
-  color: var(--slidev-theme-primary); /* Accent color for H3 */
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--slidev-theme-primary);
+}
+
+h3:not(:first-child) {
+  margin-top: 0.9rem;
 }
 
 h4 {
-  font-family: var(--slidev-theme-font-mono) !important;
-  font-size: 0.85rem !important;
+  font-family: var(--slidev-theme-font-mono);
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--slidev-theme-dim);
-  margin-bottom: 1rem !important;
-}
-
-/* Body Text */
-p {
-  font-size: 1.15rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-  opacity: 0.9;
-  max-width: 65ch; /* Optimal reading width */
-}
-
-/* Lists */
-ul, ol {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  padding-left: 0; /* Reset padding for custom bullets */
-}
-
-li {
-  font-size: 1.1rem;
-  line-height: 1.6;
   margin-bottom: 0.5rem;
-  padding-left: 1.5rem;
+}
+
+p {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin-bottom: 0.6rem;
+  opacity: 0.9;
+  max-width: 65ch;
+}
+
+/* Title + Subtitle Unit */
+.slidev-layout h1:has(+ h3),
+.slidev-layout h1:has(+ p) {
+  margin-bottom: 0;
+}
+
+.slidev-layout h1 + h3,
+.slidev-layout h1 + p {
+  margin-top: -0.35rem;
+  margin-bottom: 1.15rem;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+/* Editorial Lists: Clean, flush-left root items without bullet icons */
+.slidev-layout:not(.layout-timeline):not(.layout-timeline-vertical):not(.layout-stats):not(.layout-agenda) ul {
+  margin: 0.5rem 0;
+  padding-left: 0;
+}
+
+/* Root list items: unbulleted, flush-left, clear vertical breathing room */
+.slidev-layout:not(.layout-timeline):not(.layout-timeline-vertical):not(.layout-stats):not(.layout-agenda) ul > li {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin-bottom: 0.65rem;
+  padding-left: 0;
   position: relative;
   list-style: none;
 }
 
-/* Modern Bullet Point */
-li::before {
+.slidev-layout:not(.layout-timeline):not(.layout-timeline-vertical):not(.layout-stats):not(.layout-agenda) ul > li::before {
+  display: none;
+}
+
+/* Run-in bold lead-in styling for editorial emphasis */
+.slidev-layout:not(.layout-timeline):not(.layout-timeline-vertical):not(.layout-stats):not(.layout-agenda) ul > li > strong:first-child,
+.slidev-layout:not(.layout-timeline):not(.layout-timeline-vertical):not(.layout-stats):not(.layout-agenda) ul > li > b:first-child,
+.slidev-layout:not(.layout-timeline):not(.layout-timeline-vertical):not(.layout-stats):not(.layout-agenda) ul > li > p > strong:first-child,
+.slidev-layout:not(.layout-timeline):not(.layout-timeline-vertical):not(.layout-stats):not(.layout-agenda) ul > li > p > b:first-child {
+  color: var(--slidev-theme-primary);
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+
+
+/* Nested child lists: indented with quiet minimalist dash */
+ul > li > ul {
+  margin: 0.35rem 0 0.45rem 1.25rem;
+}
+
+ul > li > ul > li {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin-bottom: 0.25rem;
+  padding-left: 1.1rem;
+  position: relative;
+  opacity: 0.88;
+}
+
+ul > li > ul > li::before {
+  display: block;
+  content: '—';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--slidev-theme-dim);
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+/* Ordered Lists: clean decimal counter alignment */
+ol {
+  margin: 0.5rem 0;
+  padding-left: 1.4rem;
+  list-style-type: decimal;
+}
+
+ol > li {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+  list-style-type: decimal;
+}
+
+ol > li::before {
+  display: none;
+}
+
+/* Opt-in traditional bullets via layout: bullets or class: bullets */
+.slidev-layout.bullets ul > li,
+.slidev-layout ul.bullets > li {
+  padding-left: 1.25rem;
+}
+
+.slidev-layout.bullets ul > li::before,
+.slidev-layout ul.bullets > li::before {
+  display: block;
   content: '';
   position: absolute;
   left: 0;
-  top: 0.6em;
-  width: 6px;
-  height: 6px;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background-color: var(--slidev-theme-primary);
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
-/* -------------------------------------------
-   UTILITY & BLOCKS
-   ------------------------------------------- */
 
-/* Code Blocks: Mac-style window */
+/* Code, Quotes, Cards */
 .slidev-code {
-  border: 1px solid var(--slidev-theme-border) !important;
-  background-color: var(--slidev-theme-surface) !important;
+  border: 1px solid var(--slidev-theme-border);
+  background-color: var(--slidev-theme-surface);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  margin-top: 1.5rem !important;
+  margin-top: 0.75rem;
 }
 
-/* Blockquotes: Clean vertical line */
 blockquote {
   border-left: 4px solid var(--slidev-theme-primary);
-  padding-left: 1.5rem;
+  padding-left: 1.25rem;
   margin-left: 0;
   font-style: italic;
-  font-family: var(--slidev-theme-font-body); /* Kept consistent */
-  font-size: 1.25rem;
+  font-family: var(--slidev-theme-font-body);
+  font-size: 1.15rem;
   color: var(--slidev-theme-dim);
 }
 
-/* Strong Text */
 strong, b {
   font-weight: 600;
-  color: var(--slidev-theme-primary); /* Highlight keywords in color */
+  color: var(--slidev-theme-primary);
 }
 
-/* FIX: Flexible Card Component */
 .card-box {
   background-color: var(--slidev-theme-surface);
   border: 1px solid var(--slidev-theme-border);
   border-radius: 0.5rem;
-  padding: 1.5rem;
-  height: 100%; /* Fill available height in grid */
-  min-height: 0; /* Allow flex shrinking */
+  padding: 1.15rem;
+  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Prevent spillover */
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Ensure text inside doesn't force width issues */
+.card-box:hover {
+  border-color: color-mix(in srgb, var(--slidev-theme-primary) 40%, var(--slidev-theme-border));
+}
+
 .card-box p {
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  line-height: 1.45;
   color: var(--slidev-theme-dim);
   overflow-wrap: break-word;
 }
 
 .card-box h3 {
-  font-size: 1.1rem !important;
+  font-size: 1.05rem;
   font-weight: 700;
-  margin-bottom: 0.75rem !important;
+  margin-bottom: 0.5rem;
   color: var(--slidev-theme-color);
 }
 
-/* Mermaid Diagram Fixes */
 .mermaid {
   background: transparent !important;
   display: flex;
   justify-content: center;
 }
 
-/* FIX 1: H3 Spacing
-   If an H3 follows another element (is not first), push it down.
-*/
-h3:not(:first-child) {
-  margin-top: 2rem !important; /* Generous breathing room */
+/* Dense Mode */
+.slidev-layout.dense { font-size: 0.85rem; }
+.slidev-layout.dense h1 { font-size: 2.25rem; margin-bottom: 0.35rem; }
+.slidev-layout.dense h3 { font-size: 1.1rem; margin-top: 0.25rem; margin-bottom: 0.2rem; }
+.slidev-layout.dense p, .slidev-layout.dense li { line-height: 1.35; margin-bottom: 0.2rem; }
+.slidev-layout.dense .mermaid { transform: scale(0.9); transform-origin: top left; margin-top: 0.75rem; }
+.slidev-layout.dense h1 + h3, .slidev-layout.dense h1 + p { margin-top: -0.5rem; margin-bottom: 0.75rem; }
+
+/* Editorial Kicker pattern: when h4 is followed by h1 */
+.slidev-layout h4:has(+ h1),
+.slidev-layout .kicker {
+  font-family: var(--slidev-theme-font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--slidev-theme-primary);
+  margin-bottom: 0.4rem;
 }
 
-/* FIX 2: "Dense Mode" for overflowing slides 
-   Use class: "dense" in the slide frontmatter to trigger this.
-*/
-.slidev-layout.dense {
-  /* 1. Shrink the body text (p, li, code, etc.) */
-  font-size: 0.9rem !important; 
+/* Section Progress Rail */
+.editorial-rail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  display: flex;
+  gap: 3px;
+  padding: 0 0.5rem;
+  z-index: 50;
+  pointer-events: none;
 }
 
-.slidev-layout.dense h1 {
-  /* 2. REMOVED font-size override. Headers now stay huge. */
-  margin-bottom: 0.5rem !important; /* Keep margins tight for space */
+.editorial-rail .rail-seg {
+  flex: 1 1 0;
+  height: 100%;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--slidev-theme-dim) 20%, transparent);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-.slidev-layout.dense h3 {
-  /* 3. REMOVED font-size override. Sub-headers stay normal size. */
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.2rem !important;
+.editorial-rail .rail-seg.done {
+  background: color-mix(in srgb, var(--seg-color, var(--slidev-theme-primary)) 40%, transparent);
 }
 
-/* Ensure lines inside paragraphs are tight to save vertical space */
-.slidev-layout.dense p, 
-.slidev-layout.dense li {
-  line-height: 1.4 !important; 
-  margin-bottom: 0.5rem !important;
+.editorial-rail .rail-seg.current {
+  background: var(--seg-color, var(--slidev-theme-primary));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--seg-color, var(--slidev-theme-primary)) 50%, transparent);
 }
 
-/* Scale down Mermaid/Diagrams slightly to fit the dense layout */
-.slidev-layout.dense .mermaid {
-  transform: scale(0.9);
-  transform-origin: top left;
-  margin-top: 1rem;
+
+/* Aside Tag (Corner pill for deep dives or tangents) */
+.aside-tag {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.75rem;
+  z-index: 40;
+  font-family: var(--slidev-theme-font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--slidev-theme-primary);
+  border: 1px solid color-mix(in srgb, var(--slidev-theme-primary) 40%, transparent);
+  background: color-mix(in srgb, var(--slidev-theme-primary) 8%, var(--slidev-theme-surface));
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  pointer-events: none;
 }
 
-/* Ensure the Watermark stays in the background */
-.slidev-layout h1 {
-  position: relative;
-  z-index: 10; /* Main titles stay on top */
+html:not(.dark) .aside-tag {
+  color: color-mix(in oklab, var(--slidev-theme-primary) 65%, black);
 }
 
-.slidev-layout h1 {
-  margin-top: 0 !important;
-  line-height: 1.1 !important;
+/* ==========================================================================
+   Editorial Badge System
+   ========================================================================== */
+.editorial-badge,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--slidev-theme-font-mono);
+  font-weight: 500;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-style: solid;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  user-select: none;
+  line-height: 1;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
 
-/* FIX: Typographic Unit (H1 + H3)
-   If an H3 immediately follows an H1, treat them as a single unit.
-   1. Cancel the bottom margin of the H1
-   2. Cancel the top margin of the H3
-   3. Force them closer
-*/
-.slidev-layout h1 + h3 {
-  margin-top: -0.5rem !important; /* Pull H3 up */
-  margin-bottom: 2.5rem !important; /* Push subsequent content down */
-  opacity: 0.8; /* Make the H3 slightly softer than the main title */
-  font-weight: 500 !important; /* Slightly lighter weight for contrast */
-/*  color: var(--slidev-theme-dim) !important; */
+.editorial-badge--sm {
+  padding: 0.22rem 0.5rem;
+  font-size: 0.7rem;
 }
 
-/* Optional: Ensure the H1 above doesn't push too hard */
-.slidev-layout h1:has(+ h3) {
-  margin-bottom: 0 !important;
+.editorial-badge--md {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.78rem;
 }
 
-.slidev-layout.dense h1 + h3 {
-  margin-top: -0.8rem !important; /* Slightly less negative pull since fonts are smaller */
-  margin-bottom: 1.5rem !important;
+/* Primary / Accent */
+.editorial-badge--primary,
+.editorial-badge--accent {
+  background-color: color-mix(in srgb, var(--slidev-theme-primary) 14%, transparent);
+  border-color: color-mix(in srgb, var(--slidev-theme-primary) 40%, transparent);
+  color: var(--slidev-theme-primary);
 }
+html:not(.dark) .editorial-badge--primary,
+html:not(.dark) .editorial-badge--accent {
+  background-color: color-mix(in srgb, var(--slidev-theme-primary) 12%, transparent);
+  border-color: color-mix(in srgb, var(--slidev-theme-primary) 35%, transparent);
+  color: color-mix(in oklab, var(--slidev-theme-primary) 65%, black);
+}
+
+/* Secondary */
+.editorial-badge--secondary {
+  background-color: color-mix(in srgb, var(--slidev-theme-secondary) 14%, transparent);
+  border-color: color-mix(in srgb, var(--slidev-theme-secondary) 40%, transparent);
+  color: var(--slidev-theme-secondary);
+}
+html:not(.dark) .editorial-badge--secondary {
+  background-color: color-mix(in srgb, var(--slidev-theme-secondary) 12%, transparent);
+  border-color: color-mix(in srgb, var(--slidev-theme-secondary) 35%, transparent);
+  color: color-mix(in oklab, var(--slidev-theme-secondary) 65%, black);
+}
+
+/* Tertiary */
+.editorial-badge--tertiary {
+  background-color: color-mix(in srgb, var(--slidev-theme-tertiary) 14%, transparent);
+  border-color: color-mix(in srgb, var(--slidev-theme-tertiary) 40%, transparent);
+  color: var(--slidev-theme-tertiary);
+}
+html:not(.dark) .editorial-badge--tertiary {
+  background-color: color-mix(in srgb, var(--slidev-theme-tertiary) 12%, transparent);
+  border-color: color-mix(in srgb, var(--slidev-theme-tertiary) 35%, transparent);
+  color: color-mix(in oklab, var(--slidev-theme-tertiary) 65%, black);
+}
+
+/* Good (Emerald) */
+.editorial-badge--good {
+  background-color: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.40);
+  color: #34d399;
+}
+html:not(.dark) .editorial-badge--good {
+  background-color: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #047857;
+}
+
+/* Warn (Amber) */
+.editorial-badge--warn {
+  background-color: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.40);
+  color: #fbbf24;
+}
+html:not(.dark) .editorial-badge--warn {
+  background-color: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #b45309;
+}
+
+/* Bad (Rose) */
+.editorial-badge--bad {
+  background-color: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.40);
+  color: #fb7185;
+}
+html:not(.dark) .editorial-badge--bad {
+  background-color: rgba(244, 63, 94, 0.12);
+  border-color: rgba(244, 63, 94, 0.35);
+  color: #be123c;
+}
+
+/* Info (Sky) */
+.editorial-badge--info {
+  background-color: rgba(14, 165, 233, 0.15);
+  border-color: rgba(14, 165, 233, 0.40);
+  color: #38bdf8;
+}
+html:not(.dark) .editorial-badge--info {
+  background-color: rgba(14, 165, 233, 0.12);
+  border-color: rgba(14, 165, 233, 0.35);
+  color: #0369a1;
+}
+
+/* Muted (Neutral) */
+.editorial-badge--muted {
+  background-color: rgba(148, 163, 184, 0.14);
+  border-color: rgba(148, 163, 184, 0.28);
+  color: var(--slidev-theme-dim);
+}
+html:not(.dark) .editorial-badge--muted {
+  background-color: rgba(100, 116, 139, 0.10);
+  border-color: rgba(100, 116, 139, 0.28);
+  color: #475569;
+}
+
 

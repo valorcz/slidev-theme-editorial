@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps<{ text: string }>()
 const display = ref('')
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#&'
+let interval: ReturnType<typeof setInterval> | null = null
 
 onMounted(() => {
   let iteration = 0
-  const interval = setInterval(() => {
+  interval = setInterval(() => {
     display.value = props.text
       .split('')
       .map((letter, index) => {
@@ -16,9 +17,16 @@ onMounted(() => {
       })
       .join('')
 
-    if (iteration >= props.text.length) clearInterval(interval)
-    iteration += 1 / 2 // Speed of decode
+    if (iteration >= props.text.length) {
+      if (interval) clearInterval(interval)
+      interval = null
+    }
+    iteration += 1 / 2
   }, 30)
+})
+
+onUnmounted(() => {
+  if (interval) clearInterval(interval)
 })
 </script>
 

@@ -6,7 +6,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="scene" :style="{ width: size || '200px', height: size || '200px' }">
+  <div class="scene" :style="{ '--cube-size': size || '200px' }">
     <div class="cube">
       <div class="face front"></div>
       <div class="face back"></div>
@@ -20,7 +20,9 @@ defineProps<{
 
 <style scoped>
 .scene {
-  perspective: 800px; /* Determines 3D depth perception */
+  width: var(--cube-size);
+  height: var(--cube-size);
+  perspective: calc(var(--cube-size) * 4);
   display: inline-block;
 }
 
@@ -29,7 +31,7 @@ defineProps<{
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transform: rotateX(-30deg) rotateY(-45deg); /* Initial tilt */
+  transform: rotateX(-30deg) rotateY(-45deg);
   animation: spin 15s infinite linear;
 }
 
@@ -38,23 +40,19 @@ defineProps<{
   position: absolute;
   width: 100%;
   height: 100%;
-  /* The "Wireframe" Look */
   border: 2px solid var(--slidev-theme-primary); 
-  background: rgba(255, 255, 255, 0.02); /* Slight fill for volume */
+  background: rgba(255, 255, 255, 0.03);
   box-sizing: border-box;
+  backface-visibility: visible;
 }
 
-/* Positioning the faces in 3D space 
-   Calculation: translateZ = width / 2 
-   Since default is 200px, we translate 100px.
-   Using CSS calc() makes it dynamic if we change width.
-*/
-.front  { transform: rotateY(0deg) translateZ(100px); }
-.back   { transform: rotateY(180deg) translateZ(100px); }
-.right  { transform: rotateY(90deg) translateZ(100px); }
-.left   { transform: rotateY(-90deg) translateZ(100px); }
-.top    { transform: rotateX(90deg) translateZ(100px); }
-.bottom { transform: rotateX(-90deg) translateZ(100px); }
+/* Positioning the faces dynamically in 3D space */
+.front  { transform: rotateY(0deg) translateZ(calc(var(--cube-size) / 2)); }
+.back   { transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2)); }
+.right  { transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2)); }
+.left   { transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2)); }
+.top    { transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2)); }
+.bottom { transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2)); }
 
 /* Animation Loop */
 @keyframes spin {

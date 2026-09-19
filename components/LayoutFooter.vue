@@ -9,19 +9,19 @@ withDefaults(defineProps<{
   showPage: true
 })
 
-const { $slidev } = useSlideContext()
+const { $slidev, $page } = useSlideContext()
 </script>
 
 <template>
-  <footer class="absolute bottom-0 left-0 w-full px-16 py-2 flex justify-between items-end pointer-events-none text-[var(--slidev-theme-dim)] z-50">
+  <footer class="absolute bottom-0 left-0 w-full px-14 py-3 flex justify-between items-end pointer-events-none text-[var(--slidev-theme-dim)] z-50">
     
-    <div v-if="showTitle" class="text-[0.5rem] font-mono uppercase tracking-widest opacity-50 leading-none">
+    <div v-if="showTitle" class="text-[0.55rem] font-mono uppercase tracking-widest opacity-60 leading-none">
       {{ $slidev.configs.title || 'Untitled' }}
     </div>
     <div v-else></div>
 
-    <div v-if="showPage" class="text-[0.5rem] font-mono font-bold opacity-30 leading-none">
-      {{ $slidev.nav.currentPage }} / {{ $slidev.nav.total }}
+    <div v-if="showPage" class="text-[0.55rem] font-mono font-bold opacity-40 leading-none">
+      {{ $page }} / {{ $slidev.nav.total }}
     </div>
 
   </footer>

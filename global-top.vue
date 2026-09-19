@@ -16,7 +16,9 @@ watchEffect(() => {
 
   // 3. Set the variable on the root <html> element with "important" priority
   // This guarantees it overrides styles/index.css
-  document.documentElement.style.setProperty('--slidev-theme-primary', accent, 'important')
+  if (typeof document !== 'undefined') {
+    document.documentElement.style.setProperty('--slidev-theme-primary', accent, 'important')
+  }
 })
 </script>
 
